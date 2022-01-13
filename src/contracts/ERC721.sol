@@ -16,7 +16,7 @@ contract ERC721 {
     // creates a log of minting tokens
     event Transfer(
     address from,
-    adress to, 
+    address to, 
     uint256 tokenId); 
 
     // mapping in solidity create a hash table of keypair value 
