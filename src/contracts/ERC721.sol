@@ -13,12 +13,18 @@ e. create an event that emits a transfer log - contract address,
 
 
 contract ERC721 {
+
     // creates a log of minting tokens
     event Transfer(
     address from,
     address to, 
     uint256 tokenId); 
 
+    event Approval (
+        address indexed owner,
+        address indexed approved,
+        uint256 indexed tokenId);
+    
     // mapping in solidity create a hash table of keypair value 
     mapping(uint256 => address) private _tokenOwner;
 
@@ -102,7 +108,27 @@ contract ERC721 {
     }   
 
     function transferFrom(address _from, address _to, uint256 _tokenId) public {
+        require(isApprovedOrOwner(msg.sender, _tokenId));
         _transferFrom(_from, _to, _tokenId);
+    }
+
+
+    // 1. require the person approving is the owner
+    // 2. approving an addres to a token (tokenId)
+    // 3. require that we can't approve sending tokens of the owner to owner(current caller)
+    // 4. update te map of the approval addresses
+    function approve(address _to, uint256 tokenId) public {
+        address owner = ownerOf(tokenId);
+        require(_to != owner, 'Error - approval to current owner');
+        require(msg.sender == owner, 'Current caller is not the owner of the token!');
+        _tokenApprovals[tokenId] = _to;
+        emit Approval(owner, _to, tokenId);
+    }
+
+    function isApprovedOrOwner(address spender, uint256 tokenId) internal view returns(bool) {
+        require(_exist(tokenId), 'token does not exist');
+        address = ownerOf(tokenId);
+        return(spender == owner);
     }
 
 }
