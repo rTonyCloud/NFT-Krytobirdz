@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/* importing smart contracts */
+/* importing smart contracts & libraries */
 import './ERC165.sol';
 import './interfaces/IERC721.sol';
+import './libraries/Counters.sol';
 
 /*
 building the minting function:
@@ -18,12 +19,14 @@ e. create an event that emits a transfer log - contract address,
 
 contract ERC721 is ERC165, IERC721 {
 
+    using SafeMath for uint256;
+    using Counters for Counters.Counter;
 
     // mapping in solidity create a hash table of keypair value 
     mapping(uint256 => address) private _tokenOwner;
 
     // mapping from owner to number of owned tokens
-    mapping(address => uint256) private _OwnedTokensCount;
+    mapping(address => Counters.Counter) private _OwnedTokensCount;
 
     // mapping from token to approved addresses 
     mapping(uint256 => address) private _tokenApprovals;
@@ -36,9 +39,10 @@ contract ERC721 is ERC165, IERC721 {
         keccak256('ownerOf(bytes4)')^keccak256('transferFrom(bytes4)')));
     }
 
+        // we find the current balanceOf
         function balanceOf(address _owner) public override view returns(uint256) {
             require(_owner != address(0), 'owner query for non-existent token');
-            return _OwnedTokensCount[_owner];
+            return _OwnedTokensCount[_owner].current();
         }
 
         /// @notice Find the owner of an NFT
@@ -71,7 +75,7 @@ contract ERC721 is ERC165, IERC721 {
         // adding a new address with a token id for minting
         _tokenOwner[tokenId] = to;
         // mapping address of the tokenCount on with each address minting + 1 to the count.
-        _OwnedTokensCount[to] += 1;
+        _OwnedTokensCount[to].increment();
 
         emit Transfer(address(0), to, tokenId);
     }
@@ -92,8 +96,8 @@ contract ERC721 is ERC165, IERC721 {
         require(_to != address(0), 'Error - ERC721 Transfer to the zero address');
         require(ownerOf(_tokenId) == _from, 'Trying to transfer a token the address does not own!');
 
-        _OwnedTokensCount[_from] -= 1;
-        _OwnedTokensCount[_to] += 1;
+        _OwnedTokensCount[_from].decrement();
+        _OwnedTokensCount[_to].increment();
 
         _tokenOwner[_tokenId] = _to;
 
