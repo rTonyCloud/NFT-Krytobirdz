@@ -1,0 +1,58 @@
+body {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(144,11,11,1) 4%, rgba(36,3,28,1) 10%, rgba(121,9,9,1) 35%, rgba(0,0,0,1) 59%, rgba(153,50,50,1) 73%, rgba(0,0,0,1) 91%, rgba(255,0,0,1) 100%);
+    animation: gradientBG 15s ease infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    1000% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* nft cards */
+.token {
+
+    width: 300px;
+    box-shadow: 0 8px 16px rgba(5,5,5, 0.3);
+    padding: 2px 16px;
+    margin: 16px;
+    border-radius: 8px;
+    background: #EB5757;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #000000, #EB5757);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #000000, #EB5757); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+
+img {
+
+    border: .3px rgba(#e0e0e0);
+    box-shadow: 10px 10px 8px rgba(#111111);
+    border-radius: 4px;
+    padding: 5px;
+    width: 150px;
+    margin-top: 10px;
+}
+
+/* main body */
+.container-filled {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top:15%;
+
+}
